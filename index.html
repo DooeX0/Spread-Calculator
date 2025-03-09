@@ -1,180 +1,263 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Калькулятор Спреда</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #121212;
+        color: #e0e0e0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        text-align: center;
+      }
 
-        .container {
-            background: #1e1e1e;
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+      .container {
+        background: #1e1e1e;
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-        label {
-            font-size: 16px;
-            margin-top: 10px;
-        }
+      label {
+        font-size: 16px;
+        margin-top: 10px;
+      }
 
-        select, input, button {
-            width: 100%;
-            max-width: 360px;
-            padding: 12px 15px;
-            margin: 5px 0;
-            border-radius: 10px;
-            border: 1px solid #333;
-            font-size: 16px;
-            box-sizing: border-box;
-            text-align: center;
-        }
+      select,
+      input,
+      button {
+        width: 100%;
+        max-width: 360px;
+        padding: 12px 15px;
+        margin: 5px 0;
+        border-radius: 10px;
+        border: 1px solid #333;
+        font-size: 16px;
+        box-sizing: border-box;
+        text-align: center;
+      }
 
-        input, select {
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-        }
+      input,
+      select {
+        background-color: #2e2e2e;
+        color: #e0e0e0;
+      }
 
-        input::placeholder {
-            color: #888;
-            text-align: center;
-        }
+      input::placeholder {
+        color: #888;
+        text-align: center;
+      }
 
-        button {
-            background-color: #3498db;
-            color: white;
-            cursor: pointer;
-        }
+      button {
+        background-color: #3498db;
+        color: white;
+        cursor: pointer;
+      }
 
-        button:hover {
-            background-color: #2980b9;
-        }
+      button:hover {
+        background-color: #2980b9;
+      }
 
-        .result {
-            font-size: 20px;
-            margin-top: 10px;
-        }
+      .result {
+        font-size: 20px;
+        margin-top: 10px;
+      }
 
-        .history {
-            margin-top: 20px;
-            background: #1e1e1e;
-            padding: 10px;
-            border-radius: 5px;
-            width: 100%;
-            max-width: 360px;
-            max-height: 200px;
-            overflow-y: auto;
-            text-align: left;
-        }
+      .history {
+        margin-top: 20px;
+        background: #1e1e1e;
+        padding: 10px;
+        border-radius: 5px;
+        width: 100%;
+        max-width: 360px;
+        max-height: 200px;
+        overflow-y: auto;
+        text-align: left;
+      }
 
-        .history h3 {
-            text-align: center;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 5px;
-            margin-bottom: 10px;
-        }
+      .history h3 {
+        text-align: center;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+      }
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
 
-        li {
-            padding: 10px;
-            border-radius: 5px;
-            background: #2e2e2e;
-            margin-bottom: 5px;
-            border-left: 4px solid #3498db;
-        }
+      li {
+        padding: 10px;
+        border-radius: 5px;
+        background: #2e2e2e;
+        margin-bottom: 5px;
+        border-left: 4px solid #3498db;
+      }
+
+      .dollarRateField {
+        display: block;
+      }
+
+      .dollarRateText {
+        display: none;
+        font-size: 18px;
+        color: #3498db;
+        margin-top: 5px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h2>Калькулятор Спреда</h2>
-        <label>Выберите монету:</label>
-        <select id="coinSelect">
-            <option value="TONUSDT">TON</option>
-            <option value="NOTUSDT">NOT</option>
-            <option value="HMSTRUSDT">HMSTR</option>
-            <option value="DOGSUSDT">DOGS</option>
-        </select>
-        <p>Рыночная цена: <span id="marketPrice">0.0000000</span></p>
-        <input type="number" id="dollarRate" placeholder="Курс доллара">
-        <input type="number" id="sellPrice" placeholder="Цена продажи">
-        <button onclick="calculateSpread()">Рассчитать</button>
-        <p class="result" id="spreadResult">Спред: -</p>
-        <div class="history">
-            <h3>История спреда</h3>
-            <ul id="historyList"></ul>
-        </div>
-        <button onclick="clearHistory()">Очистить историю</button>
+      <h2>Калькулятор Спреда</h2>
+      <label>Выберите монету:</label>
+      <select id="coinSelect">
+        <option value="TONUSDT">TON</option>
+        <option value="NOTUSDT">NOT</option>
+        <option value="HMSTRUSDT">HMSTR</option>
+        <option value="DOGSUSDT">DOGS</option>
+      </select>
+      <p>Рыночная цена: <span id="marketPrice">0.0000000</span></p>
+
+      <label>Выберите способ получения курса доллара:</label>
+      <select id="rateMethod">
+        <option value="manual">Ручной ввод</option>
+        <option value="auto">Автоматически (USDT + 1 рубль)</option>
+      </select>
+
+      <div class="dollarRateField">
+        <input type="number" id="dollarRate" placeholder="Курс доллара" />
+      </div>
+      <div class="dollarRateText" id="dollarRateText">
+        Курс доллара: <span id="autoDollarRate">-</span>
+      </div>
+
+      <input type="number" id="sellPrice" placeholder="Цена продажи" />
+      <button onclick="calculateSpread()">Рассчитать</button>
+      <p class="result" id="spreadResult">Спред: -</p>
+      <div class="history">
+        <h3>История спреда</h3>
+        <ul id="historyList"></ul>
+      </div>
+      <button onclick="clearHistory()">Очистить историю</button>
     </div>
 
     <script>
-        let socket;
-        function connectWebSocket(coin) {
-            if (socket) socket.close();
-            socket = new WebSocket("wss://stream.bybit.com/v5/public/spot");
-            socket.onopen = () => {
-                socket.send(JSON.stringify({ op: "subscribe", args: ["tickers." + coin] }));
-            };
-            socket.onmessage = (event) => {
-                let data = JSON.parse(event.data);
-                if (data.data && data.data.lastPrice) {
-                    document.getElementById("marketPrice").innerText = parseFloat(data.data.lastPrice).toFixed(7);
-                }
-            };
-        }
+      let socket,
+        usdtPrice = 0;
 
-        document.getElementById("coinSelect").addEventListener("change", function() {
-            connectWebSocket(this.value);
-            document.getElementById("marketPrice").innerText = "0.0000000";
+      // Функция для получения цены USDT через CoinGecko API
+      async function fetchUSDTPrice() {
+        try {
+          let response = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=rub"
+          );
+          let data = await response.json();
+          usdtPrice = data.tether.rub;
+          document.getElementById("autoDollarRate").innerText = (
+            usdtPrice + 1
+          ).toFixed(2); // Обновляем цену
+        } catch (error) {
+          console.error("Ошибка при получении курса USDT:", error);
+        }
+      }
+
+      function connectWebSocket(coin) {
+        if (socket) socket.close();
+        socket = new WebSocket("wss://stream.bybit.com/v5/public/spot");
+        socket.onopen = () => {
+          socket.send(
+            JSON.stringify({ op: "subscribe", args: ["tickers." + coin] })
+          );
+        };
+        socket.onmessage = (event) => {
+          let data = JSON.parse(event.data);
+          if (data.data && data.data.lastPrice) {
+            document.getElementById("marketPrice").innerText = parseFloat(
+              data.data.lastPrice
+            ).toFixed(7);
+          }
+        };
+      }
+
+      document
+        .getElementById("coinSelect")
+        .addEventListener("change", function () {
+          connectWebSocket(this.value);
+          document.getElementById("marketPrice").innerText = "0.0000000";
         });
 
-        function calculateSpread() {
-            let marketPrice = parseFloat(document.getElementById("marketPrice").innerText);
-            let dollarRate = parseFloat(document.getElementById("dollarRate").value);
-            let sellPrice = parseFloat(document.getElementById("sellPrice").value);
-            let coin = document.getElementById("coinSelect").value;
+      document
+        .getElementById("rateMethod")
+        .addEventListener("change", function () {
+          if (this.value === "manual") {
+            document.querySelector(".dollarRateField").style.display = "block"; // Показываем поле для ввода
+            document.querySelector(".dollarRateText").style.display = "none"; // Прячем текст с курсом
+          } else {
+            document.querySelector(".dollarRateField").style.display = "none"; // Прячем поле для ввода
+            document.querySelector(".dollarRateText").style.display = "block"; // Показываем текст с курсом
+          }
+        });
 
-            if (!marketPrice || !dollarRate || !sellPrice) {
-                document.getElementById("spreadResult").innerText = "Ошибка: введите корректные значения";
-                return;
-            }
+      async function calculateSpread() {
+        let marketPrice = parseFloat(
+          document.getElementById("marketPrice").innerText
+        );
+        let sellPrice = parseFloat(document.getElementById("sellPrice").value);
+        let coin = document.getElementById("coinSelect").value;
+        let rateMethod = document.getElementById("rateMethod").value;
 
-            let finalPrice = marketPrice * dollarRate;
-            let spread = ((sellPrice - 0.009 * sellPrice - finalPrice) / finalPrice) * 100;
-            document.getElementById("spreadResult").innerText = `Спред: ${spread.toFixed(2)}%`;
+        let dollarRate;
 
-            let historyList = document.getElementById("historyList");
-            let listItem = document.createElement("li");
-            listItem.innerHTML = `<strong>${coin}</strong>: Спред: ${spread.toFixed(2)}% (Покупка: ${finalPrice.toFixed(7)}, Продажа: ${sellPrice})`;
-            historyList.prepend(listItem);
+        if (rateMethod === "manual") {
+          dollarRate = parseFloat(document.getElementById("dollarRate").value);
+        } else if (rateMethod === "auto") {
+          if (usdtPrice === 0) {
+            await fetchUSDTPrice(); // Получаем цену USDT только при необходимости
+          }
+          dollarRate = usdtPrice + 1; // Автоматический курс = цена USDT + 1 рубль
         }
 
-        function clearHistory() {
-            document.getElementById("historyList").innerHTML = "";
+        if (!marketPrice || !dollarRate || !sellPrice) {
+          document.getElementById("spreadResult").innerText =
+            "Ошибка: введите корректные значения";
+          return;
         }
 
-        connectWebSocket("TONUSDT");
+        let finalPrice = marketPrice * dollarRate;
+        let spread =
+          ((sellPrice - 0.009 * sellPrice - finalPrice) / finalPrice) * 100;
+        document.getElementById(
+          "spreadResult"
+        ).innerText = `Спред: ${spread.toFixed(2)}%`;
+
+        let historyList = document.getElementById("historyList");
+        let listItem = document.createElement("li");
+        listItem.innerHTML = `<strong>${coin}</strong>: Спред: ${spread.toFixed(
+          2
+        )}% (Покупка: ${finalPrice.toFixed(7)}, Продажа: ${sellPrice})`;
+        historyList.prepend(listItem);
+      }
+
+      function clearHistory() {
+        document.getElementById("historyList").innerHTML = "";
+      }
+
+      fetchUSDTPrice(); // Запрос курса USDT при загрузке
+      connectWebSocket("TONUSDT"); // Подключаемся к WebSocket для TON
     </script>
-</body>
+  </body>
 </html>
