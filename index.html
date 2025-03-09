@@ -7,70 +7,165 @@
     <style>
       body {
         font-family: Arial, sans-serif;
-        background-color: #eef3ff;
+        background-color: #121212;
+        color: #e0e0e0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
         text-align: center;
-        padding: 20px;
       }
+
       .container {
-        background: white;
+        background: #1e1e1e;
+        width: 100%;
         max-width: 400px;
-        margin: auto;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
-      input {
+
+      .form-group {
         width: 100%;
-        padding: 10px;
-        margin: 10px 0;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
+
+      label {
+        font-size: 16px;
+        margin-top: 10px;
+        align-self: center;
+      }
+
+      select,
+      input,
       button {
         width: 100%;
-        padding: 10px;
+        max-width: 360px;
+        padding: 12px 15px;
+        margin: 5px 0;
+        border-radius: 10px;
+        border: 1px solid #333;
+        font-size: 16px;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      input,
+      select {
+        background-color: #2e2e2e;
+        color: #e0e0e0;
+      }
+
+      input::placeholder {
+        color: #888;
+        text-align: center;
+      }
+
+      button {
         background-color: #3498db;
         color: white;
-        border: none;
-        border-radius: 5px;
         cursor: pointer;
-        font-size: 16px;
       }
+
       button:hover {
         background-color: #2980b9;
       }
+
       .result {
         font-size: 20px;
-        color: #2c3e50;
         margin-top: 10px;
+      }
+
+      .history {
+        margin-top: 20px;
+        background: #1e1e1e;
+        padding: 10px;
+        border-radius: 5px;
+        width: 100%;
+        max-width: 360px;
+        max-height: 200px;
+        overflow-y: auto;
+        text-align: left;
+      }
+
+      .history h3 {
+        text-align: center;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      li {
+        padding: 10px;
+        border-radius: 5px;
+        background: #2e2e2e;
+        margin-bottom: 5px;
+        border-left: 4px solid #3498db;
       }
     </style>
   </head>
+
   <body>
     <div class="container">
       <h2>Калькулятор Спреда</h2>
-      <label for="buyPrice">Цена покупки:</label>
-      <input
-        type="number"
-        id="buyPrice"
-        placeholder="Введите цену покупки"
-        step="0.01"
-      />
-      <label for="sellPrice">Цена продажи:</label>
-      <input
-        type="number"
-        id="sellPrice"
-        placeholder="Введите цену продажи"
-        step="0.01"
-      />
+      <div class="form-group">
+        <label for="crypto">Выберите криптовалюту:</label>
+        <select id="crypto">
+          <option value="TON">TON</option>
+          <option value="NOT">NOT</option>
+          <option value="DOGS">DOGS</option>
+          <option value="HMSTR">HMSTR</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="buyPrice">Цена покупки:</label>
+        <input
+          type="number"
+          id="buyPrice"
+          placeholder="Введите цену покупки"
+          step="0.01"
+        />
+      </div>
+      <div class="form-group">
+        <label for="sellPrice">Цена продажи:</label>
+        <input
+          type="number"
+          id="sellPrice"
+          placeholder="Введите цену продажи"
+          step="0.01"
+        />
+      </div>
       <button onclick="calculateSpread()">Рассчитать</button>
       <p class="result" id="result">Спред: -</p>
+      <div class="history">
+        <h3>История спреда</h3>
+        <ul id="historyList"></ul>
+      </div>
+      <button onclick="clearHistory()">Очистить историю</button>
     </div>
 
     <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        loadHistory();
+      });
+
       function calculateSpread() {
         let buyPrice = parseFloat(document.getElementById("buyPrice").value);
         let sellPrice = parseFloat(document.getElementById("sellPrice").value);
+        let crypto = document.getElementById("crypto").value;
 
         if (
           isNaN(buyPrice) ||
@@ -83,11 +178,38 @@
           return;
         }
 
-        let spread =
-          ((sellPrice - 0.009 * sellPrice - buyPrice) / buyPrice) * 100;
+        let spread = ((sellPrice - buyPrice) / buyPrice) * 100;
         document.getElementById("result").innerText = `Спред: ${spread.toFixed(
           2
         )}%`;
+
+        let historyList = document.getElementById("historyList");
+        let listItem = document.createElement("li");
+        listItem.innerHTML = `<strong>${crypto}</strong>: Спред: ${spread.toFixed(
+          2
+        )}% (Покупка: ${buyPrice}, Продажа: ${sellPrice})`;
+        historyList.prepend(listItem);
+
+        saveHistory();
+      }
+
+      function saveHistory() {
+        localStorage.setItem(
+          "spreadHistory",
+          document.getElementById("historyList").innerHTML
+        );
+      }
+
+      function loadHistory() {
+        let savedHistory = localStorage.getItem("spreadHistory");
+        if (savedHistory) {
+          document.getElementById("historyList").innerHTML = savedHistory;
+        }
+      }
+
+      function clearHistory() {
+        document.getElementById("historyList").innerHTML = "";
+        localStorage.removeItem("spreadHistory");
       }
     </script>
   </body>
