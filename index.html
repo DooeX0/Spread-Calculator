@@ -1,216 +1,180 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор Спреда</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #121212;
-        color: #e0e0e0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        text-align: center;
-      }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
 
-      .container {
-        background: #1e1e1e;
-        width: 100%;
-        max-width: 400px;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
+        .container {
+            background: #1e1e1e;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-      .form-group {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
+        label {
+            font-size: 16px;
+            margin-top: 10px;
+        }
 
-      label {
-        font-size: 16px;
-        margin-top: 10px;
-        align-self: center;
-      }
+        select, input, button {
+            width: 100%;
+            max-width: 360px;
+            padding: 12px 15px;
+            margin: 5px 0;
+            border-radius: 10px;
+            border: 1px solid #333;
+            font-size: 16px;
+            box-sizing: border-box;
+            text-align: center;
+        }
 
-      select,
-      input,
-      button {
-        width: 100%;
-        max-width: 360px;
-        padding: 12px 15px;
-        margin: 5px 0;
-        border-radius: 10px;
-        border: 1px solid #333;
-        font-size: 16px;
-        box-sizing: border-box;
-        text-align: center;
-      }
+        input, select {
+            background-color: #2e2e2e;
+            color: #e0e0e0;
+        }
 
-      input,
-      select {
-        background-color: #2e2e2e;
-        color: #e0e0e0;
-      }
+        input::placeholder {
+            color: #888;
+            text-align: center;
+        }
 
-      input::placeholder {
-        color: #888;
-        text-align: center;
-      }
+        button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+        }
 
-      button {
-        background-color: #3498db;
-        color: white;
-        cursor: pointer;
-      }
+        button:hover {
+            background-color: #2980b9;
+        }
 
-      button:hover {
-        background-color: #2980b9;
-      }
+        .result {
+            font-size: 20px;
+            margin-top: 10px;
+        }
 
-      .result {
-        font-size: 20px;
-        margin-top: 10px;
-      }
+        .history {
+            margin-top: 20px;
+            background: #1e1e1e;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 360px;
+            max-height: 200px;
+            overflow-y: auto;
+            text-align: left;
+        }
 
-      .history {
-        margin-top: 20px;
-        background: #1e1e1e;
-        padding: 10px;
-        border-radius: 5px;
-        width: 100%;
-        max-width: 360px;
-        max-height: 200px;
-        overflow-y: auto;
-        text-align: left;
-      }
+        .history h3 {
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
 
-      .history h3 {
-        text-align: center;
-        border-bottom: 2px solid #3498db;
-        padding-bottom: 5px;
-        margin-bottom: 10px;
-      }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      li {
-        padding: 10px;
-        border-radius: 5px;
-        background: #2e2e2e;
-        margin-bottom: 5px;
-        border-left: 4px solid #3498db;
-      }
+        li {
+            padding: 10px;
+            border-radius: 5px;
+            background: #2e2e2e;
+            margin-bottom: 5px;
+            border-left: 4px solid #3498db;
+        }
     </style>
-  </head>
-
-  <body>
+</head>
+<body>
     <div class="container">
-      <h2>Калькулятор Спреда</h2>
-      <div class="form-group">
-        <label for="crypto">Выберите криптовалюту:</label>
-        <select id="crypto">
-          <option value="TON">TON</option>
-          <option value="NOT">NOT</option>
-          <option value="DOGS">DOGS</option>
-          <option value="HMSTR">HMSTR</option>
+        <h2>Калькулятор Спреда</h2>
+        <label>Выберите монету:</label>
+        <select id="coinSelect">
+            <option value="TONUSDT">TON</option>
+            <option value="NOTUSDT">NOT</option>
+            <option value="HMSTRUSDT">HMSTR</option>
+            <option value="DOGSUSDT">DOGS</option>
         </select>
-      </div>
-      <div class="form-group">
-        <label for="buyPrice">Цена покупки:</label>
-        <input
-          type="number"
-          id="buyPrice"
-          placeholder="Введите цену покупки"
-          step="0.01"
-        />
-      </div>
-      <div class="form-group">
-        <label for="sellPrice">Цена продажи:</label>
-        <input
-          type="number"
-          id="sellPrice"
-          placeholder="Введите цену продажи"
-          step="0.01"
-        />
-      </div>
-      <button onclick="calculateSpread()">Рассчитать</button>
-      <p class="result" id="result">Спред: -</p>
-      <div class="history">
-        <h3>История спреда</h3>
-        <ul id="historyList"></ul>
-      </div>
-      <button onclick="clearHistory()">Очистить историю</button>
+        <p>Рыночная цена: <span id="marketPrice">0.0000000</span></p>
+        <input type="number" id="dollarRate" placeholder="Курс доллара">
+        <input type="number" id="sellPrice" placeholder="Цена продажи">
+        <button onclick="calculateSpread()">Рассчитать</button>
+        <p class="result" id="spreadResult">Спред: -</p>
+        <div class="history">
+            <h3>История спреда</h3>
+            <ul id="historyList"></ul>
+        </div>
+        <button onclick="clearHistory()">Очистить историю</button>
     </div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        loadHistory();
-      });
-
-      function calculateSpread() {
-        let buyPrice = parseFloat(document.getElementById("buyPrice").value);
-        let sellPrice = parseFloat(document.getElementById("sellPrice").value);
-        let crypto = document.getElementById("crypto").value;
-
-        if (
-          isNaN(buyPrice) ||
-          isNaN(sellPrice) ||
-          buyPrice <= 0 ||
-          sellPrice <= 0
-        ) {
-          document.getElementById("result").innerText =
-            "Ошибка: введите корректные значения";
-          return;
+        let socket;
+        function connectWebSocket(coin) {
+            if (socket) socket.close();
+            socket = new WebSocket("wss://stream.bybit.com/v5/public/spot");
+            socket.onopen = () => {
+                socket.send(JSON.stringify({ op: "subscribe", args: ["tickers." + coin] }));
+            };
+            socket.onmessage = (event) => {
+                let data = JSON.parse(event.data);
+                if (data.data && data.data.lastPrice) {
+                    document.getElementById("marketPrice").innerText = parseFloat(data.data.lastPrice).toFixed(7);
+                }
+            };
         }
 
-        let spread = ((sellPrice - buyPrice) / buyPrice) * 100;
-        document.getElementById("result").innerText = `Спред: ${spread.toFixed(
-          2
-        )}%`;
+        document.getElementById("coinSelect").addEventListener("change", function() {
+            connectWebSocket(this.value);
+            document.getElementById("marketPrice").innerText = "0.0000000";
+        });
 
-        let historyList = document.getElementById("historyList");
-        let listItem = document.createElement("li");
-        listItem.innerHTML = `<strong>${crypto}</strong>: Спред: ${spread.toFixed(
-          2
-        )}% (Покупка: ${buyPrice}, Продажа: ${sellPrice})`;
-        historyList.prepend(listItem);
+        function calculateSpread() {
+            let marketPrice = parseFloat(document.getElementById("marketPrice").innerText);
+            let dollarRate = parseFloat(document.getElementById("dollarRate").value);
+            let sellPrice = parseFloat(document.getElementById("sellPrice").value);
+            let coin = document.getElementById("coinSelect").value;
 
-        saveHistory();
-      }
+            if (!marketPrice || !dollarRate || !sellPrice) {
+                document.getElementById("spreadResult").innerText = "Ошибка: введите корректные значения";
+                return;
+            }
 
-      function saveHistory() {
-        localStorage.setItem(
-          "spreadHistory",
-          document.getElementById("historyList").innerHTML
-        );
-      }
+            let finalPrice = marketPrice * dollarRate;
+            let spread = ((sellPrice - 0.009 * sellPrice - finalPrice) / finalPrice) * 100;
+            document.getElementById("spreadResult").innerText = `Спред: ${spread.toFixed(2)}%`;
 
-      function loadHistory() {
-        let savedHistory = localStorage.getItem("spreadHistory");
-        if (savedHistory) {
-          document.getElementById("historyList").innerHTML = savedHistory;
+            let historyList = document.getElementById("historyList");
+            let listItem = document.createElement("li");
+            listItem.innerHTML = `<strong>${coin}</strong>: Спред: ${spread.toFixed(2)}% (Покупка: ${finalPrice.toFixed(7)}, Продажа: ${sellPrice})`;
+            historyList.prepend(listItem);
         }
-      }
 
-      function clearHistory() {
-        document.getElementById("historyList").innerHTML = "";
-        localStorage.removeItem("spreadHistory");
-      }
+        function clearHistory() {
+            document.getElementById("historyList").innerHTML = "";
+        }
+
+        connectWebSocket("TONUSDT");
     </script>
-  </body>
+</body>
 </html>
