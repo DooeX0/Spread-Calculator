@@ -1,2 +1,2 @@
 # Spread-Calculator
-Spread Calculator
+Spread Calculato
