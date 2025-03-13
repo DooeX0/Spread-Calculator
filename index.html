@@ -261,7 +261,7 @@
       <input type="number" id="sellPrice" placeholder="Введите цену продажи" />
 
       <button onclick="calculateSpread()">Рассчитать</button>
-      <p class="result" id="spreadResult">Спред: -</p>
+      <p class="result" id="spreadResult">Спред:</p>
 
       <div class="history">
         <h3>История расчётов</h3>
@@ -348,8 +348,7 @@
         }
 
         if (!marketPrice || !dollarRate || !sellPrice) {
-          document.getElementById("spreadResult").innerText =
-            "Ошибка: введите корректные значения";
+          document.getElementById("spreadResult").innerText = "Спред:"; // Убираем дефис
           return;
         }
 
