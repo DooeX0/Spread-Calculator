@@ -21,18 +21,27 @@
         background: #1e1e1e;
         width: 100%;
         max-width: 400px;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
       }
 
+      h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #3498db;
+      }
+
       label {
         font-size: 16px;
-        margin-top: 10px;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        display: block;
+        color: #e0e0e0;
       }
 
       select,
@@ -41,16 +50,12 @@
         width: 100%;
         max-width: 360px;
         padding: 12px 15px;
-        margin: 5px 0;
+        margin: 10px 0;
         border-radius: 10px;
-        border: 1px solid #333;
+        border: 1px solid #444;
         font-size: 16px;
         box-sizing: border-box;
         text-align: center;
-      }
-
-      input,
-      select {
         background-color: #2e2e2e;
         color: #e0e0e0;
       }
@@ -64,6 +69,8 @@
         background-color: #3498db;
         color: white;
         cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
       }
 
       button:hover {
@@ -72,14 +79,16 @@
 
       .result {
         font-size: 20px;
-        margin-top: 10px;
+        margin-top: 20px;
+        font-weight: bold;
+        color: #2ecc71;
       }
 
       .history {
         margin-top: 20px;
-        background: #1e1e1e;
-        padding: 10px;
-        border-radius: 5px;
+        background: #2e2e2e;
+        padding: 15px;
+        border-radius: 10px;
         width: 100%;
         max-width: 360px;
         max-height: 200px;
@@ -90,8 +99,10 @@
       .history h3 {
         text-align: center;
         border-bottom: 2px solid #3498db;
-        padding-bottom: 5px;
-        margin-bottom: 10px;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        font-size: 18px;
+        color: #3498db;
       }
 
       ul {
@@ -103,19 +114,61 @@
       li {
         padding: 10px;
         border-radius: 5px;
-        background: #2e2e2e;
-        margin-bottom: 5px;
+        background: #1e1e1e;
+        margin-bottom: 10px;
         border-left: 4px solid #3498db;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+      }
+
+      .delete-btn {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: background-color 0.3s ease;
+      }
+
+      .delete-btn:hover {
+        background-color: #c0392b;
       }
 
       .dollarRateField {
         display: block;
+        width: 100%;
+        max-width: 360px;
+      }
+
+      .dollarRateField input {
+        width: 100%;
+        max-width: 360px;
+        padding: 12px 15px;
+        margin: 10px 0;
+        border-radius: 10px;
+        border: 1px solid #444;
+        font-size: 16px;
+        box-sizing: border-box;
+        text-align: center;
+        background-color: #2e2e2e;
+        color: #e0e0e0;
       }
 
       .dollarRateText {
         display: none;
         font-size: 18px;
         color: #3498db;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+
+      .info-text {
+        font-size: 14px;
+        color: #888;
         margin-top: 5px;
       }
     </style>
@@ -130,6 +183,7 @@
         <option value="HMSTRUSDT">HMSTR</option>
         <option value="DOGSUSDT">DOGS</option>
       </select>
+
       <p>Рыночная цена: <span id="marketPrice">0.0000000</span></p>
 
       <label>Выберите способ получения курса доллара:</label>
@@ -145,13 +199,17 @@
         Курс доллара: <span id="autoDollarRate">-</span>
       </div>
 
-      <input type="number" id="sellPrice" placeholder="Цена продажи" />
+      <label>Цена продажи:</label>
+      <input type="number" id="sellPrice" placeholder="Введите цену продажи" />
+
       <button onclick="calculateSpread()">Рассчитать</button>
       <p class="result" id="spreadResult">Спред: -</p>
+
       <div class="history">
-        <h3>История спреда</h3>
+        <h3>История расчётов</h3>
         <ul id="historyList"></ul>
       </div>
+
       <button onclick="clearHistory()">Очистить историю</button>
     </div>
 
@@ -246,10 +304,20 @@
 
         let historyList = document.getElementById("historyList");
         let listItem = document.createElement("li");
-        listItem.innerHTML = `<strong>${coin}</strong>: Спред: ${spread.toFixed(
+        listItem.innerHTML = `
+          <div>
+            <strong>${coin}</strong>: Спред: ${spread.toFixed(
           2
-        )}% (Покупка: ${finalPrice.toFixed(7)}, Продажа: ${sellPrice})`;
+        )}% (Покупка: ${finalPrice.toFixed(7)}, Продажа: ${sellPrice})
+          </div>
+          <button class="delete-btn" onclick="deleteHistoryItem(this)">Удалить</button>
+        `;
         historyList.prepend(listItem);
+      }
+
+      function deleteHistoryItem(button) {
+        let listItem = button.parentElement;
+        listItem.remove();
       }
 
       function clearHistory() {
