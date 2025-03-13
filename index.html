@@ -52,12 +52,20 @@
         padding: 12px 15px;
         margin: 10px 0;
         border-radius: 10px;
-        border: 1px solid #444;
         font-size: 16px;
         box-sizing: border-box;
         text-align: center;
         background-color: #2e2e2e;
         color: #e0e0e0;
+        border: none; /* Убираем чёрные рамки */
+        outline: none; /* Убираем обводку при фокусе */
+      }
+
+      /* Лёгкая обводка при фокусе */
+      input:focus,
+      select:focus,
+      button:focus {
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
       }
 
       input::placeholder {
@@ -81,7 +89,6 @@
         font-size: 20px;
         margin-top: 20px;
         font-weight: bold;
-        color: #2ecc71;
       }
 
       .history {
@@ -150,12 +157,13 @@
         padding: 12px 15px;
         margin: 10px 0;
         border-radius: 10px;
-        border: 1px solid #444;
         font-size: 16px;
         box-sizing: border-box;
         text-align: center;
         background-color: #2e2e2e;
         color: #e0e0e0;
+        border: none; /* Убираем чёрные рамки */
+        outline: none; /* Убираем обводку при фокусе */
       }
 
       .dollarRateText {
@@ -170,6 +178,56 @@
         font-size: 14px;
         color: #888;
         margin-top: 5px;
+      }
+
+      /* Мобильная оптимизация */
+      @media (max-width: 480px) {
+        .container {
+          padding: 15px;
+          border-radius: 10px;
+        }
+
+        h2 {
+          font-size: 20px;
+        }
+
+        label {
+          font-size: 14px;
+        }
+
+        select,
+        input,
+        button {
+          padding: 10px 12px;
+          font-size: 14px;
+        }
+
+        .result {
+          font-size: 18px;
+        }
+
+        .history {
+          padding: 10px;
+          max-height: 150px;
+        }
+
+        .history h3 {
+          font-size: 16px;
+        }
+
+        li {
+          font-size: 12px;
+          padding: 8px;
+        }
+
+        .delete-btn {
+          padding: 4px 8px;
+          font-size: 10px;
+        }
+
+        .dollarRateText {
+          font-size: 16px;
+        }
       }
     </style>
   </head>
@@ -298,9 +356,16 @@
         let finalPrice = marketPrice * dollarRate;
         let spread =
           ((sellPrice - 0.009 * sellPrice - finalPrice) / finalPrice) * 100;
-        document.getElementById(
-          "spreadResult"
-        ).innerText = `Спред: ${spread.toFixed(2)}%`;
+        const spreadResult = document.getElementById("spreadResult");
+
+        // Подсветка результата в зависимости от значения спреда
+        if (spread < 0) {
+          spreadResult.style.color = "#e74c3c"; // Красный для отрицательного спреда
+        } else {
+          spreadResult.style.color = "#2ecc71"; // Зелёный для положительного спреда
+        }
+
+        spreadResult.innerText = `Спред: ${spread.toFixed(2)}%`;
 
         let historyList = document.getElementById("historyList");
         let listItem = document.createElement("li");
