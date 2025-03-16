@@ -47,7 +47,7 @@
       select,
       input,
       button {
-        width: 100%;
+        width: calc(100% - 30px);
         max-width: 360px;
         padding: 12px 15px;
         margin: 10px 0;
@@ -57,14 +57,13 @@
         text-align: center;
         background-color: #2e2e2e;
         color: #e0e0e0;
-        border: none; /* Убираем чёрные рамки */
-        outline: none; /* Убираем обводку при фокусе */
+        border: none;
+        outline: none;
       }
 
-      /* Лёгкая обводка при фокусе */
-      input:focus,
-      select:focus,
-      button:focus {
+      /* Подсветка только для полей "Курс доллара" и "Введите цену продажи" */
+      #dollarRate:focus,
+      #sellPrice:focus {
         box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
       }
 
@@ -92,11 +91,10 @@
       }
 
       .history {
-        margin-top: 5px;
-
+        margin-top: 20px;
         padding: 15px;
         border-radius: 10px;
-        width: 100%;
+        width: calc(100% - 30px);
         max-width: 360px;
         max-height: 200px;
         overflow-y: auto;
@@ -105,22 +103,28 @@
 
       .history h3 {
         text-align: center;
-
         margin-bottom: 15px;
         font-size: 18px;
         color: #3498db;
-      }
-
-      ul {
-        list-style: none;
+        background: none;
+        border: none;
+        outline: none;
+        box-shadow: none;
         padding: 0;
-        margin: 0;
+        margin-top: 0;
       }
 
-      li {
+      .history ul {
+        list-style: none;
+        padding: 10px;
+        margin: 0;
+        border-radius: 5px;
+      }
+
+      .history li {
         padding: 10px;
         border-radius: 5px;
-        background: #292929;
+        background: #1e1e1e;
         margin-bottom: 10px;
         border-left: 4px solid #3498db;
         display: flex;
@@ -161,8 +165,8 @@
         text-align: center;
         background-color: #2e2e2e;
         color: #e0e0e0;
-        border: none; /* Убираем чёрные рамки */
-        outline: none; /* Убираем обводку при фокусе */
+        border: none;
+        outline: none;
       }
 
       .dollarRateText {
@@ -179,7 +183,115 @@
         margin-top: 5px;
       }
 
-      /* Мобильная оптимизация */
+      .side-menu {
+        position: fixed;
+        top: 0;
+        right: -360px;
+        width: 360px;
+        height: 100%;
+        background: #1e1e1e;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+        transition: right 0.3s ease, visibility 0.3s ease, opacity 0.3s ease;
+        padding: 20px;
+        z-index: 999;
+        visibility: hidden;
+        opacity: 0;
+        overflow-y: auto;
+      }
+
+      .side-menu.open {
+        right: 0;
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .side-menu h3 {
+        color: #3498db;
+        text-align: center;
+        margin-bottom: 20px;
+        margin-top: 50px;
+      }
+
+      .bank-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .bank-item {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .bank-item label {
+        font-size: 14px;
+        color: #3498db;
+        font-weight: bold;
+      }
+
+      .bank-item input {
+        width: 100%;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        background-color: #2e2e2e;
+        color: #e0e0e0;
+        border: none;
+        outline: none;
+      }
+
+      .clear-all-btn {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 15px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        width: 100%;
+        transition: background-color 0.3s ease;
+      }
+
+      .clear-all-btn:hover {
+        background-color: #c0392b;
+      }
+
+      .burger-menu {
+        position: fixed; /* Закрепляем кнопку на экране */
+        top: 20px; /* Отступ сверху */
+        right: 20px; /* Отступ справа */
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        z-index: 1000; /* Убедимся, что кнопка всегда поверх других элементов */
+        background: #1e1e1e; /* Фон кнопки */
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Тень кнопки */
+        transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Плавное изменение фона и тени */
+      }
+
+      /* Стили для кнопки бургера, когда боковое меню открыто */
+      .side-menu.open ~ .burger-menu {
+        background: transparent; /* Убираем фон */
+        box-shadow: none; /* Убираем тень */
+      }
+
+      .burger-menu span {
+        width: 25px;
+        height: 3px;
+        background-color: #3498db;
+        transition: all 0.3s ease;
+      }
+
+      .burger-menu:hover span {
+        background-color: #2980b9;
+      }
+
       @media (max-width: 480px) {
         .container {
           padding: 15px;
@@ -227,10 +339,36 @@
         .dollarRateText {
           font-size: 16px;
         }
+
+        .side-menu {
+          width: 100%;
+          right: -100%;
+        }
+
+        .side-menu.open {
+          right: 0;
+        }
       }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
+    <div class="burger-menu" onclick="toggleSideMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="side-menu" id="sideMenu">
+      <h3>ПЕРЕВОДЫ</h3>
+      <div class="bank-list" id="bankList">
+        <!-- Список банков будет заполнен динамически -->
+      </div>
+      <button class="clear-all-btn" onclick="clearAllTransfers()">
+        Очистить все переводы
+      </button>
+    </div>
+
     <div class="container">
       <h2>Калькулятор Спреда</h2>
       <label>Выберите монету:</label>
@@ -263,7 +401,7 @@
       <p class="result" id="spreadResult">Спред:</p>
 
       <div class="history">
-        <h3>История расчётов</h3>
+        <h3>История спреда</h3>
         <ul id="historyList"></ul>
       </div>
 
@@ -271,10 +409,101 @@
     </div>
 
     <script>
+      const banks = [
+        "Т БАНК",
+        "ВБ",
+        "АЛЬФА",
+        "СБЕР",
+        "ГАЗПРОМ",
+        "ВТБ",
+        "ЯНДЕКС",
+        "ОЗОН",
+        "МТС",
+        "ОТП БАНК",
+        "РСХБ",
+        "ПСБ",
+        "ПОЧТА БАНК",
+        "БАЙБИТ",
+        "ТЕЛЕГРАММ",
+        "ЮМАНИ",
+      ];
+
+      let transfersData = {};
+
+      // Загрузка данных из localStorage
+      function loadTransfersData() {
+        const savedData = localStorage.getItem("transfersData");
+        if (savedData) {
+          transfersData = JSON.parse(savedData);
+        } else {
+          banks.forEach((bank) => {
+            transfersData[bank] = { incoming: "", outgoing: "" };
+          });
+        }
+      }
+
+      // Сохранение данных в localStorage
+      function saveTransfersData() {
+        localStorage.setItem("transfersData", JSON.stringify(transfersData));
+      }
+
+      // Очистка всех переводов
+      function clearAllTransfers() {
+        banks.forEach((bank) => {
+          transfersData[bank] = { incoming: "", outgoing: "" };
+        });
+        saveTransfersData();
+        renderBankList();
+      }
+
+      // Рендеринг списка банков
+      function renderBankList() {
+        const bankList = document.getElementById("bankList");
+        bankList.innerHTML = banks
+          .map(
+            (bank) => `
+          <div class="bank-item">
+            <label>${bank}</label>
+            <input
+              type="number"
+              placeholder="Входящий перевод"
+              value="${transfersData[bank].incoming}"
+              oninput="updateTransfer('${bank}', 'incoming', this.value)"
+            />
+            <input
+              type="number"
+              placeholder="Исходящий перевод"
+              value="${transfersData[bank].outgoing}"
+              oninput="updateTransfer('${bank}', 'outgoing', this.value)"
+            />
+          </div>
+        `
+          )
+          .join("");
+      }
+
+      // Обновление данных о переводах
+      function updateTransfer(bank, type, value) {
+        transfersData[bank][type] = value;
+        saveTransfersData();
+      }
+
+      // Инициализация
+      function init() {
+        loadTransfersData();
+        renderBankList();
+      }
+
+      // Остальной код калькулятора спреда
       let socket,
         usdtPrice = 0;
+      let spreadHistory = {};
+      let calculationId = 0;
 
-      // Функция для получения цены USDT через CoinGecko API
+      ["TONUSDT", "NOTUSDT", "HMSTRUSDT", "DOGSUSDT"].forEach((coin) => {
+        spreadHistory[coin] = [];
+      });
+
       async function fetchUSDTPrice() {
         try {
           let response = await fetch(
@@ -284,7 +513,7 @@
           usdtPrice = data.tether.rub;
           document.getElementById("autoDollarRate").innerText = (
             usdtPrice + 1
-          ).toFixed(2); // Обновляем цену
+          ).toFixed(2);
         } catch (error) {
           console.error("Ошибка при получении курса USDT:", error);
         }
@@ -319,11 +548,11 @@
         .getElementById("rateMethod")
         .addEventListener("change", function () {
           if (this.value === "manual") {
-            document.querySelector(".dollarRateField").style.display = "block"; // Показываем поле для ввода
-            document.querySelector(".dollarRateText").style.display = "none"; // Прячем текст с курсом
+            document.querySelector(".dollarRateField").style.display = "block";
+            document.querySelector(".dollarRateText").style.display = "none";
           } else {
-            document.querySelector(".dollarRateField").style.display = "none"; // Прячем поле для ввода
-            document.querySelector(".dollarRateText").style.display = "block"; // Показываем текст с курсом
+            document.querySelector(".dollarRateField").style.display = "none";
+            document.querySelector(".dollarRateText").style.display = "block";
           }
         });
 
@@ -341,13 +570,13 @@
           dollarRate = parseFloat(document.getElementById("dollarRate").value);
         } else if (rateMethod === "auto") {
           if (usdtPrice === 0) {
-            await fetchUSDTPrice(); // Получаем цену USDT только при необходимости
+            await fetchUSDTPrice();
           }
-          dollarRate = usdtPrice + 1; // Автоматический курс = цена USDT + 1 рубль
+          dollarRate = usdtPrice + 1;
         }
 
         if (!marketPrice || !dollarRate || !sellPrice) {
-          document.getElementById("spreadResult").innerText = "Спред:"; // Убираем дефис
+          document.getElementById("spreadResult").innerText = "Спред:";
           return;
         }
 
@@ -356,49 +585,64 @@
           ((sellPrice - 0.009 * sellPrice - finalPrice) / finalPrice) * 100;
         const spreadResult = document.getElementById("spreadResult");
 
-        // Подсветка результата в зависимости от значения спреда
         if (spread < 0) {
-          spreadResult.style.color = "#e74c3c"; // Красный для отрицательного спреда
+          spreadResult.style.color = "#e74c3c";
         } else {
-          spreadResult.style.color = "#2ecc71"; // Зелёный для положительного спреда
+          spreadResult.style.color = "#2ecc71";
         }
 
         spreadResult.innerText = `Спред: ${spread.toFixed(2)}%`;
 
         let historyList = document.getElementById("historyList");
         let listItem = document.createElement("li");
+        calculationId++;
+        listItem.setAttribute("data-id", calculationId);
         listItem.innerHTML = `
           <div>
             <strong>${coin}</strong>: Спред: ${spread.toFixed(
           2
         )}% (Покупка: ${finalPrice.toFixed(7)}, Продажа: ${sellPrice})
           </div>
-          <button class="delete-btn" onclick="deleteHistoryItem(this)">Удалить</button>
+          <button class="delete-btn" onclick="deleteCalculation(${calculationId}, '${coin}')">Удалить</button>
         `;
         historyList.prepend(listItem);
 
-        // Сохраняем историю после каждого расчёта
+        spreadHistory[coin].push({
+          id: calculationId,
+          spread: spread.toFixed(2),
+          date: new Date().toISOString(),
+        });
+
         saveHistory();
+        saveSpreadHistory();
       }
 
-      function deleteHistoryItem(button) {
-        let listItem = button.parentElement;
-        listItem.remove();
-        saveHistory(); // Сохраняем историю после удаления элемента
+      function deleteCalculation(id, coin) {
+        const historyList = document.getElementById("historyList");
+        const itemToRemove = historyList.querySelector(`li[data-id="${id}"]`);
+        if (itemToRemove) {
+          itemToRemove.remove();
+        }
+
+        spreadHistory[coin] = spreadHistory[coin].filter(
+          (item) => item.id !== id
+        );
+
+        saveHistory();
+        saveSpreadHistory();
       }
 
       function clearHistory() {
         document.getElementById("historyList").innerHTML = "";
-        localStorage.removeItem("spreadHistory"); // Очищаем историю в LocalStorage
+        localStorage.removeItem("spreadHistory");
+        saveHistory();
       }
 
-      // Сохранение истории в LocalStorage
       function saveHistory() {
         const historyList = document.getElementById("historyList").innerHTML;
         localStorage.setItem("spreadHistory", historyList);
       }
 
-      // Загрузка истории из LocalStorage
       function loadHistory() {
         const historyList = localStorage.getItem("spreadHistory");
         if (historyList) {
@@ -406,12 +650,39 @@
         }
       }
 
-      // Загружаем историю при загрузке страницы
+      function saveSpreadHistory() {
+        localStorage.setItem("spreadData", JSON.stringify(spreadHistory));
+      }
+
+      function loadSpreadHistory() {
+        const savedData = localStorage.getItem("spreadData");
+        if (savedData) {
+          spreadHistory = JSON.parse(savedData);
+          Object.keys(spreadHistory).forEach((coin) => {
+            spreadHistory[coin] = spreadHistory[coin].map((item) => ({
+              ...item,
+              date: new Date(item.date),
+            }));
+          });
+        }
+      }
+
+      function toggleSideMenu() {
+        const sideMenu = document.getElementById("sideMenu");
+        sideMenu.classList.toggle("open");
+      }
+
       window.onload = function () {
+        init(); // Инициализация данных о переводах
         loadHistory();
-        fetchUSDTPrice(); // Запрос курса USDT при загрузке
-        connectWebSocket("TONUSDT"); // Подключаемся к WebSocket для TON
+        loadSpreadHistory();
+        fetchUSDTPrice();
+        connectWebSocket("TONUSDT");
+
+        const sideMenu = document.getElementById("sideMenu");
+        sideMenu.classList.remove("open");
       };
     </script>
   </body>
 </html>
+переведи этот код в пайтон и сделай exe файл что бы калькулятор можно было установить на виндовс
