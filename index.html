@@ -61,7 +61,6 @@
         outline: none;
       }
 
-      /* Подсветка только для полей "Курс доллара" и "Введите цену продажи" */
       #dollarRate:focus,
       #sellPrice:focus {
         box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
@@ -260,25 +259,24 @@
       }
 
       .burger-menu {
-        position: fixed; /* Закрепляем кнопку на экране */
-        top: 20px; /* Отступ сверху */
-        right: 20px; /* Отступ справа */
+        position: fixed;
+        top: 20px;
+        right: 20px;
         cursor: pointer;
         display: flex;
         flex-direction: column;
         gap: 5px;
-        z-index: 1000; /* Убедимся, что кнопка всегда поверх других элементов */
-        background: #1e1e1e; /* Фон кнопки */
+        z-index: 1000; /* Убедитесь, что кнопка всегда поверх других элементов */
+        background: #1e1e1e;
         padding: 10px;
         border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Тень кнопки */
-        transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Плавное изменение фона и тени */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
       }
 
-      /* Стили для кнопки бургера, когда боковое меню открыто */
       .side-menu.open ~ .burger-menu {
-        background: transparent; /* Убираем фон */
-        box-shadow: none; /* Убираем тень */
+        background: transparent;
+        box-shadow: none;
       }
 
       .burger-menu span {
@@ -423,8 +421,6 @@
         "РСХБ",
         "ПСБ",
         "ПОЧТА БАНК",
-        "БАЙБИТ",
-        "ТЕЛЕГРАММ",
         "ЮМАНИ",
       ];
 
@@ -462,30 +458,47 @@
         bankList.innerHTML = banks
           .map(
             (bank) => `
-          <div class="bank-item">
-            <label>${bank}</label>
-            <input
-              type="number"
-              placeholder="Входящий перевод"
-              value="${transfersData[bank].incoming}"
-              oninput="updateTransfer('${bank}', 'incoming', this.value)"
-            />
-            <input
-              type="number"
-              placeholder="Исходящий перевод"
-              value="${transfersData[bank].outgoing}"
-              oninput="updateTransfer('${bank}', 'outgoing', this.value)"
-            />
-          </div>
-        `
+              <div class="bank-item">
+                <label>${bank}</label>
+                <input
+                  type="number"
+                  placeholder="Входящий перевод"
+                  value="${transfersData[bank].incoming}"
+                  oninput="updateTransfer('${bank}', 'incoming', this.value)"
+                  style="color: ${getColor(transfersData[bank].incoming)}"
+                />
+                <input
+                  type="number"
+                  placeholder="Исходящий перевод"
+                  value="${transfersData[bank].outgoing}"
+                  oninput="updateTransfer('${bank}', 'outgoing', this.value)"
+                  style="color: ${getColor(transfersData[bank].outgoing)}"
+                />
+              </div>
+            `
           )
           .join("");
+      }
+
+      // Функция для определения цвета
+      function getColor(value) {
+        const num = parseFloat(value);
+        if (num === 1 || num === 2) {
+          return "#2ecc71"; // Зеленый
+        } else if (num === 3) {
+          return "#e67e22"; // Оранжевый
+        } else if (num >= 4) {
+          return "#e74c3c"; // Красный
+        } else {
+          return "#e0e0e0"; // Стандартный цвет
+        }
       }
 
       // Обновление данных о переводах
       function updateTransfer(bank, type, value) {
         transfersData[bank][type] = value;
         saveTransfersData();
+        renderBankList(); // Перерисовываем список банков для обновления цвета
       }
 
       // Инициализация
