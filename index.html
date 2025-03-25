@@ -259,9 +259,9 @@
       }
 
       .burger-menu {
-        position: fixed;
-        top: 20px;
-        right: 20px;
+        position: fixed; /* Закрепляем кнопку */
+        top: 20px; /* Отступ сверху */
+        right: 20px; /* Отступ справа */
         cursor: pointer;
         display: flex;
         flex-direction: column;
@@ -288,6 +288,32 @@
 
       .burger-menu:hover span {
         background-color: #2980b9;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          width: 90%;
+          padding: 20px;
+        }
+
+        .side-menu {
+          width: 300px; /* Уменьшаем ширину бокового меню */
+        }
+
+        .bank-item input {
+          font-size: 12px; /* Уменьшаем размер шрифта для полей ввода */
+          padding: 6px 10px; /* Уменьшаем внутренние отступы */
+        }
+
+        .clear-all-btn {
+          font-size: 14px; /* Уменьшаем размер шрифта кнопки */
+          padding: 10px 12px;
+        }
+
+        .burger-menu {
+          top: 15px; /* Уменьшаем отступ сверху */
+          right: 15px; /* Уменьшаем отступ справа */
+        }
       }
 
       @media (max-width: 480px) {
@@ -347,8 +373,64 @@
           right: 0;
         }
       }
+
+      @media (max-width: 480px) {
+        .container {
+          width: 100%;
+          padding: 15px;
+        }
+
+        .side-menu {
+          width: 100%; /* Боковое меню занимает всю ширину */
+        }
+
+        .bank-item input {
+          font-size: 10px; /* Ещё больше уменьшаем размер шрифта */
+          padding: 5px 8px;
+        }
+
+        .clear-all-btn {
+          font-size: 12px;
+          padding: 8px 10px;
+        }
+
+        .burger-menu {
+          top: 10px;
+          right: 10px;
+        }
+
+        h2 {
+          font-size: 18px; /* Уменьшаем размер заголовка */
+        }
+
+        .result {
+          font-size: 16px; /* Уменьшаем размер текста результата */
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDwp_DTN4G4u1LJIPaxp7BUZ2lIlrmjIxw",
+        authDomain: "spread-calculator-6cd33.firebaseapp.com",
+        projectId: "spread-calculator-6cd33",
+        storageBucket: "spread-calculator-6cd33.firebasestorage.app",
+        messagingSenderId: "652714333303",
+        appId: "1:652714333303:web:883e77628a39217fc3e272",
+        measurementId: "G-ZFMQHTZ0JP",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+
+      console.log("Firebase initialized successfully");
+    </script>
   </head>
   <body>
     <div class="burger-menu" onclick="toggleSideMenu()">
@@ -494,11 +576,37 @@
         }
       }
 
-      // Обновление данных о переводах
+      // Обновление данных о переводах с синхронизацией
       function updateTransfer(bank, type, value) {
         transfersData[bank][type] = value;
         saveTransfersData();
-        renderBankList(); // Перерисовываем список банков для обновления цвета
+
+        // Сохраняем текущий элемент с фокусом и позицию курсора
+        const activeElement = document.activeElement;
+        let cursorPosition = null;
+
+        if (activeElement && activeElement.tagName === "INPUT") {
+          cursorPosition = activeElement.selectionStart; // Сохраняем позицию курсора
+        }
+
+        // Перерисовываем список банков
+        renderBankList();
+
+        // Восстанавливаем фокус и позицию курсора
+        if (activeElement && activeElement.tagName === "INPUT") {
+          const inputs = document.querySelectorAll(".bank-item input");
+          inputs.forEach((input) => {
+            if (
+              input.placeholder === activeElement.placeholder &&
+              input.value === activeElement.value
+            ) {
+              input.focus();
+              if (cursorPosition !== null) {
+                input.setSelectionRange(cursorPosition, cursorPosition); // Восстанавливаем позицию курсора
+              }
+            }
+          });
+        }
       }
 
       // Инициализация
@@ -684,6 +792,16 @@
         const sideMenu = document.getElementById("sideMenu");
         sideMenu.classList.toggle("open");
       }
+
+      // Синхронизация данных между устройствами
+      window.addEventListener("storage", (event) => {
+        if (event.key === "transfersData") {
+          transfersData = JSON.parse(event.newValue || "{}");
+          renderBankList();
+        } else if (event.key === "spreadHistory") {
+          loadHistory();
+        }
+      });
 
       window.onload = function () {
         init(); // Инициализация данных о переводах
