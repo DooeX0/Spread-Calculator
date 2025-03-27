@@ -435,6 +435,42 @@
           padding: 10px 12px; /* Уменьшаем внутренние отступы */
         }
       }
+
+      @media (max-width: 480px) {
+        .side-menu {
+          width: 100%; /* Боковое меню занимает всю ширину экрана */
+          left: 0; /* Устанавливаем левый край меню */
+          right: 0; /* Убираем смещение вправо */
+          padding: 15px; /* Уменьшаем внутренние отступы */
+        }
+
+        .side-menu.open {
+          right: 0; /* Открытое меню полностью видно */
+        }
+
+        .bank-list {
+          gap: 10px; /* Уменьшаем расстояние между элементами */
+        }
+
+        .bank-item {
+          flex-direction: column; /* Располагаем элементы вертикально */
+          gap: 5px; /* Уменьшаем расстояние между полями ввода */
+        }
+
+        .bank-item input {
+          font-size: 12px; /* Уменьшаем размер шрифта */
+          padding: 8px 10px; /* Уменьшаем внутренние отступы */
+        }
+
+        .bank-item label {
+          font-size: 12px; /* Уменьшаем размер шрифта для меток */
+        }
+
+        .clear-all-btn {
+          font-size: 14px; /* Уменьшаем размер шрифта кнопки */
+          padding: 10px 12px; /* Уменьшаем внутренние отступы */
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module">
@@ -551,7 +587,7 @@
           transfersData = JSON.parse(savedData);
         } else {
           banks.forEach((bank) => {
-            transfersData[bank] = { incoming: "", outgoing: "" };
+            transfersData[bank] = { incoming: "" };
           });
         }
       }
@@ -564,7 +600,7 @@
       // Очистка всех переводов
       function clearAllTransfers() {
         banks.forEach((bank) => {
-          transfersData[bank] = { incoming: "", outgoing: "" };
+          transfersData[bank] = { incoming: "" };
         });
         saveTransfersData();
         renderBankList();
@@ -591,15 +627,6 @@
                   oninput="updateTransfer('${bank}', 'incoming', this.value)"
                   style="color: ${getColor(transfersData[bank].incoming)}"
                 />
-                <input
-                  type="number"
-                  placeholder="Исходящий перевод"
-                  value="${transfersData[bank].outgoing}"
-                  data-bank="${bank}"
-                  data-type="outgoing"
-                  oninput="updateTransfer('${bank}', 'outgoing', this.value)"
-                  style="color: ${getColor(transfersData[bank].outgoing)}"
-                />
               </div>
             `
           )
@@ -625,8 +652,10 @@
 
       // Обновление данных о переводах с синхронизацией
       function updateTransfer(bank, type, value) {
-        transfersData[bank][type] = value;
-        saveTransfersData();
+        if (type === "incoming") {
+          transfersData[bank][type] = value;
+          saveTransfersData();
+        }
 
         // Сохраняем текущий элемент с фокусом и позицию курсора
         const activeElement = document.activeElement;
