@@ -548,6 +548,10 @@
       // Рендеринг списка банков
       function renderBankList() {
         const bankList = document.getElementById("bankList");
+
+        // Сохраняем текущую позицию прокрутки
+        const scrollPosition = bankList.scrollTop;
+
         bankList.innerHTML = banks
           .map(
             (bank) => `
@@ -557,6 +561,8 @@
                   type="number"
                   placeholder="Входящий перевод"
                   value="${transfersData[bank].incoming}"
+                  data-bank="${bank}"
+                  data-type="incoming"
                   oninput="updateTransfer('${bank}', 'incoming', this.value)"
                   style="color: ${getColor(transfersData[bank].incoming)}"
                 />
@@ -564,6 +570,8 @@
                   type="number"
                   placeholder="Исходящий перевод"
                   value="${transfersData[bank].outgoing}"
+                  data-bank="${bank}"
+                  data-type="outgoing"
                   oninput="updateTransfer('${bank}', 'outgoing', this.value)"
                   style="color: ${getColor(transfersData[bank].outgoing)}"
                 />
@@ -571,6 +579,9 @@
             `
           )
           .join("");
+
+        // Восстанавливаем позицию прокрутки
+        bankList.scrollTop = scrollPosition;
       }
 
       // Функция для определения цвета
@@ -594,6 +605,8 @@
 
         // Сохраняем текущий элемент с фокусом и позицию курсора
         const activeElement = document.activeElement;
+        const activeBank = bank;
+        const activeType = type;
         let cursorPosition = null;
 
         if (activeElement && activeElement.tagName === "INPUT") {
@@ -604,20 +617,18 @@
         renderBankList();
 
         // Восстанавливаем фокус и позицию курсора
-        if (activeElement && activeElement.tagName === "INPUT") {
-          const inputs = document.querySelectorAll(".bank-item input");
-          inputs.forEach((input) => {
-            if (
-              input.placeholder === activeElement.placeholder &&
-              input.value === activeElement.value
-            ) {
-              input.focus();
-              if (cursorPosition !== null) {
-                input.setSelectionRange(cursorPosition, cursorPosition); // Восстанавливаем позицию курсора
-              }
+        const inputs = document.querySelectorAll(".bank-item input");
+        inputs.forEach((input) => {
+          const inputBank = input.getAttribute("data-bank");
+          const inputType = input.getAttribute("data-type");
+
+          if (inputBank === activeBank && inputType === activeType) {
+            input.focus();
+            if (cursorPosition !== null) {
+              input.setSelectionRange(cursorPosition, cursorPosition); // Восстанавливаем позицию курсора
             }
-          });
-        }
+          }
+        });
       }
 
       // Инициализация
