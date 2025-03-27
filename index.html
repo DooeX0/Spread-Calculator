@@ -2,7 +2,10 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0"
+    />
     <title>Калькулятор Спреда</title>
     <style>
       body {
@@ -410,13 +413,13 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module">
-      // Import the functions you need from the installed Firebase package
+      // Импорт необходимых функций из установленного пакета Firebase
       import { initializeApp } from "firebase/app";
       import { getAnalytics } from "firebase/analytics";
       import { getFirestore } from "firebase/firestore";
       import { getStorage } from "firebase/storage";
 
-      // Your web app's Firebase configuration
+      // Конфигурация Firebase для вашего веб-приложения
       const firebaseConfig = {
         apiKey: "AIzaSyDwp_DTN4G4u1LJIPaxp7BUZ2lIlrmjIxw",
         authDomain: "spread-calculator-6cd33.firebaseapp.com",
@@ -427,17 +430,17 @@
         measurementId: "G-ZFMQHTZ0JP",
       };
 
-      // Initialize Firebase
+      // Инициализация Firebase
       const app = initializeApp(firebaseConfig);
       const analytics = getAnalytics(app);
 
-      // Initialize Firestore
+      // Инициализация Firestore
       const db = getFirestore(app);
 
-      // Initialize Storage
+      // Инициализация Storage
       const storage = getStorage(app);
 
-      console.log("Firebase, Firestore, and Storage initialized successfully");
+      console.log("Firebase, Firestore и Storage успешно инициализированы");
     </script>
   </head>
   <body>
@@ -633,6 +636,7 @@
         spreadHistory[coin] = [];
       });
 
+      // Получение курса USDT
       async function fetchUSDTPrice() {
         try {
           let response = await fetch(
@@ -648,6 +652,7 @@
         }
       }
 
+      // Подключение к WebSocket для получения рыночной цены
       function connectWebSocket(coin) {
         if (socket) socket.close();
         socket = new WebSocket("wss://stream.bybit.com/v5/public/spot");
@@ -666,6 +671,7 @@
         };
       }
 
+      // Событие изменения монеты
       document
         .getElementById("coinSelect")
         .addEventListener("change", function () {
@@ -673,6 +679,7 @@
           document.getElementById("marketPrice").innerText = "0.0000000";
         });
 
+      // Событие изменения метода получения курса доллара
       document
         .getElementById("rateMethod")
         .addEventListener("change", function () {
@@ -685,6 +692,7 @@
           }
         });
 
+      // Расчет спреда
       async function calculateSpread() {
         let marketPrice = parseFloat(
           document.getElementById("marketPrice").innerText
@@ -746,6 +754,7 @@
         saveSpreadHistory();
       }
 
+      // Удаление расчета из истории
       function deleteCalculation(id, coin) {
         const historyList = document.getElementById("historyList");
         const itemToRemove = historyList.querySelector(`li[data-id="${id}"]`);
@@ -761,17 +770,20 @@
         saveSpreadHistory();
       }
 
+      // Очистка всей истории
       function clearHistory() {
         document.getElementById("historyList").innerHTML = "";
         localStorage.removeItem("spreadHistory");
         saveHistory();
       }
 
+      // Сохранение истории в localStorage
       function saveHistory() {
         const historyList = document.getElementById("historyList").innerHTML;
         localStorage.setItem("spreadHistory", historyList);
       }
 
+      // Загрузка истории из localStorage
       function loadHistory() {
         const historyList = localStorage.getItem("spreadHistory");
         if (historyList) {
@@ -779,10 +791,12 @@
         }
       }
 
+      // Сохранение данных о спредах
       function saveSpreadHistory() {
         localStorage.setItem("spreadData", JSON.stringify(spreadHistory));
       }
 
+      // Загрузка данных о спредах
       function loadSpreadHistory() {
         const savedData = localStorage.getItem("spreadData");
         if (savedData) {
@@ -796,6 +810,7 @@
         }
       }
 
+      // Переключение бокового меню
       function toggleSideMenu() {
         const sideMenu = document.getElementById("sideMenu");
         sideMenu.classList.toggle("open");
@@ -811,6 +826,7 @@
         }
       });
 
+      // Выполнение при загрузке страницы
       window.onload = function () {
         init(); // Инициализация данных о переводах
         loadHistory();
