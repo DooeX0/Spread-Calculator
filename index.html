@@ -410,6 +410,31 @@
           font-size: 16px; /* Уменьшаем размер текста результата */
         }
       }
+
+      @media (max-width: 480px) {
+        .bank-list {
+          gap: 10px; /* Уменьшаем расстояние между элементами */
+        }
+
+        .bank-item {
+          flex-direction: column; /* Располагаем элементы вертикально */
+          gap: 5px; /* Уменьшаем расстояние между полями ввода */
+        }
+
+        .bank-item input {
+          font-size: 12px; /* Уменьшаем размер шрифта */
+          padding: 8px 10px; /* Уменьшаем внутренние отступы */
+        }
+
+        .bank-item label {
+          font-size: 12px; /* Уменьшаем размер шрифта для меток */
+        }
+
+        .clear-all-btn {
+          font-size: 14px; /* Уменьшаем размер шрифта кнопки */
+          padding: 10px 12px; /* Уменьшаем внутренние отступы */
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module">
