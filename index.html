@@ -529,6 +529,16 @@
         <option value="NOTUSDT">NOT</option>
         <option value="HMSTRUSDT">HMSTR</option>
         <option value="DOGSUSDT">DOGS</option>
+        <option value="BTCUSDT">BTC</option>
+        <option value="ETHUSDT">ETH</option>
+        <option value="USDTUSDT">USDT</option>
+        <option value="XMRUSDT">XMR</option>
+        <option value="USDCUSDT">USDC</option>
+        <option value="DAIUSDT">DAI</option>
+        <option value="TRXUSDT">TRX</option>
+        <option value="A7A5USDT">A7A5</option>
+        <option value="RUBTUSDT">RUBT</option>
+        <option value="LTCUSDT">LTC</option>
       </select>
 
       <p>Рыночная цена: <span id="marketPrice">0.0000000</span></p>
@@ -697,7 +707,22 @@
       let spreadHistory = {};
       let calculationId = 0;
 
-      ["TONUSDT", "NOTUSDT", "HMSTRUSDT", "DOGSUSDT"].forEach((coin) => {
+      [
+        "TONUSDT",
+        "NOTUSDT",
+        "HMSTRUSDT",
+        "DOGSUSDT",
+        "BTCUSDT",
+        "ETHUSDT",
+        "USDTUSDT",
+        "XMRUSDT",
+        "USDCUSDT",
+        "DAIUSDT",
+        "TRXUSDT",
+        "A7A5USDT",
+        "RUBTUSDT",
+        "LTCUSDT",
+      ].forEach((coin) => {
         spreadHistory[coin] = [];
       });
 
